@@ -8,7 +8,7 @@ the current versions of your package environment to the `[compat]` section of yo
 If a `[compat]` section already exists it is overwritten without warning, so make a backup
 of your `Project.toml` file first.
 
-## Background
+### Background
 For reproducible research it is important to document the version of all packages you used to
 achieve a result that you published in a paper. This package makes it easy to do this. Compared to committing the `Manifest.toml` this approach has the following advantages:
 
@@ -26,6 +26,8 @@ Add it to your global environment:
 using Pkg
 Pkg.add("https://github.com/ufechner7/PkgHelpers.jl")
 ```
+## Usage
+
 Then change to the project you want to freeze:  
 ```bash
 cd MyProject
