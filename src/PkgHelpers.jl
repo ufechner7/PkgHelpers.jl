@@ -3,7 +3,22 @@ module PkgHelpers
 # freeze the current package versions; overwrites the current Project.toml file
 using Pkg, TOML
 
-export freeze
+export freeze, lower_bound
+
+"""
+    lower_bound(pkg; julia=juliaversion(true), relaxed = false)
+
+Adds the current package versions as lower bound to the compat section of the Project.toml file.
+
+Parameters:
+    
+    - julia:   version string for Julia compatibility, e.g. "1" or "1.8"
+    - relaxed: if set to `true`, the minor version number is omitted from the generated  
+               compat entries.
+"""
+function lower_bound(pkg; julia=juliaversion(true), relaxed = false)
+    freeze1(pkg; julia, relaxed, lowerbound=true)
+end
 
 """
     freeze(julia=juliaversion())
@@ -17,9 +32,12 @@ Parameters:
            compat entries. This means, non-breaking minor updates are allowed.
 
 For strict compatibility only add the Julia versions you tested your project with.
-The parameters `status` and `mytoml` are internal and only needed for the unit tests.
 """
-function freeze(pkg; julia=juliaversion(), relaxed = false, status="", mytoml="")
+function freeze(pkg; julia=juliaversion(), relaxed = false)
+    freeze1(pkg; julia, relaxed)
+end
+
+function freeze1(pkg; julia=juliaversion(), relaxed = false, lowerbound=false, status="", mytoml="")
     function printkv(io, dict, key)
         if key in keys(dict)
             value = dict[key]
@@ -37,7 +55,7 @@ function freeze(pkg; julia=juliaversion(), relaxed = false, status="", mytoml=""
             TOML.print(io, dict[key])
         end
     end
-    project_file, compat = project_compat(pkg, relaxed; status=status)
+    project_file, compat = project_compat(pkg, relaxed, lowerbound; status=status)
     if mytoml != ""
         project_file = mytoml
     end
@@ -70,7 +88,7 @@ Returns the full file name of the Project.toml file and the dictionary
 `compat` that can be added to the Project.toml file to freeze the package
 versions.
 """
-function project_compat(pkg, relaxed; prn=false, status="")
+function project_compat(pkg, relaxed, lowerbound; prn=false, status="")
     if status==""
         io = IOBuffer();
         pkg.status(; io)
@@ -94,7 +112,11 @@ function project_compat(pkg, relaxed; prn=false, status="")
                     vers_array=split(vers, '.')
                     vers=vers_array[1]*'.'*vers_array[2]
                 end
-                push!(compat, (String(pkg)=>String("~"*vers)))
+                if lowerbound
+                    push!(compat, (String(pkg)=>String(vers)))
+                else
+                    push!(compat, (String(pkg)=>String("~"*vers)))
+                end
             end
         end
         i += 1
@@ -110,9 +132,13 @@ function test(mod::Module)
     println(st)
 end
 
-function juliaversion()
+function juliaversion(lowerbound=false)
     res=VERSION
-    "~" * repr(Int64(res.major)) * "." * repr(Int64(res.minor))
+    res = repr(Int64(res.major)) * "." * repr(Int64(res.minor))
+    if ! lowerbound
+        res = "~" * res
+    end
+    res
 end
 
 end

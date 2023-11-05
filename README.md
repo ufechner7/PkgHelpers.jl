@@ -3,8 +3,9 @@
 [![Build Status](https://github.com/ufechner7/PkgHelpers.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/ufechner7/PkgHelpers.jl/actions/workflows/CI.yml?query=branch%3Amain)
 
 ## Introduction
-This package provides the function `freeze()` to freeze your Julia environment by adding
-the current versions of your package environment to the `[compat]` section of your project.  
+This package provides the functions `freeze()` to freeze your Julia environment by adding
+the current versions of your package environment to the `[compat]` section of your project,
+and the function `lower_bound()` to set a lower bound of the versions of your packages.
 If a `[compat]` section already exists it is overwritten without warning, so make a backup
 of your `Project.toml` file first.
 
@@ -28,7 +29,7 @@ Pkg.add("https://github.com/ufechner7/PkgHelpers.jl")
 ```
 ## Usage
 
-Then change to the project you want to freeze:  
+Then change to the project you want to freeze or set a lower bound:
 ```bash
 cd MyProject
 julia --project
@@ -38,11 +39,20 @@ and on the Julia prompt type
 using PkgHelpers, Pkg
 freeze(Pkg)
 ```
+or
+```julia
+using PkgHelpers, Pkg
+lower_bound(Pkg)
+```
 This will overwrite your current `Project.toml`, so make sure you committed it to git before calling this function.
 
 If you tested your project with the Julia versions 1.9 and 1.10, use the call
 ```julia
 freeze(Pkg; julia="~1.9, ~1.10")
+```
+If you want to set as lower bound an older Julia version, you can also do that:
+```julia
+lower_bound(Pkg; julia="1.6")
 ```
 You can also use ranges, e.g.
 ```julia
