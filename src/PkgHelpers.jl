@@ -6,11 +6,17 @@ using Pkg, TOML
 export freeze
 
 """
-    freeze()
+    freeze(julia="1")
 
 Freezes the current package versions by adding them to the Project.toml file.
+
+Parameters:
+
+- julia: version string for Julia compatibility, e.g. "1" or "~1.8, ~1.9, ~1.10"
+
+For strict compatibility only add the Julia versions you tested your project with.
 """
-function freeze()
+function freeze(julia="1")
     function printkv(io, dict, key)
         if key in keys(dict)
             value = dict[key]
@@ -31,6 +37,7 @@ function freeze()
     project_file, compat = project_compat()
     if compat.count > 0
         dict = (TOML.parsefile(project_file))
+        push!(compat, ("julia" => julia))
         open(project_file, "w") do io
             printkv(io, dict, "name")
             printkv(io, dict, "uuid")
