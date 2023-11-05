@@ -89,5 +89,12 @@ function project_compat(prn=false)
     project_file, compat
 end
 
+function test(mod)
+    io = IOBuffer();
+    mod.status(; io)
+    st = String(take!(io))
+    println(st)
+end
+
 
 end
