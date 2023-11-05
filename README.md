@@ -50,4 +50,12 @@ freeze(Pkg; julia="1.6 - 1.11")
 ```
 If you use a range there must be a space around the hyphen.
 
+You can also call:
+```julia
+freeze(Pkg; relaxed=true)
+```
+This omits the patch version from the generated `compat` entry. The effect is that non-braking
+updates of the packages are allowed. While updates of the patch version SHOULD be non-braking,
+this is not always the case. Use this option with care.
+
 More info about the version specifiers can be found [here](https://pkgdocs.julialang.org/v1/compatibility/).
