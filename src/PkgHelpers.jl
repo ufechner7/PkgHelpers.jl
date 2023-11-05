@@ -16,7 +16,7 @@ Parameters:
 
 For strict compatibility only add the Julia versions you tested your project with.
 """
-function freeze(pkg; julia=juliaversion(), status="")
+function freeze(pkg; julia=juliaversion(), status="", mytoml="")
     function printkv(io, dict, key)
         if key in keys(dict)
             value = dict[key]
@@ -34,7 +34,10 @@ function freeze(pkg; julia=juliaversion(), status="")
             TOML.print(io, dict[key])
         end
     end
-    project_file, compat = project_compat(pkg)
+    project_file, compat = project_compat(pkg; status=status)
+    if mytoml != ""
+        project_file = mytoml
+    end
     if compat.count > 0
         dict = (TOML.parsefile(project_file))
         push!(compat, ("julia" => julia))
@@ -104,6 +107,5 @@ function juliaversion()
     res=VERSION
     "~" * repr(Int64(res.major)) * "." * repr(Int64(res.minor))
 end
-
 
 end
