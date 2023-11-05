@@ -11,7 +11,7 @@ the current versions of your package environment to the `[compat]` section of yo
 Add it to your global environment:  
 ```julia
 using Pkg
-Pkg.add("https://github.com/ufechner7/PkgHelpers.jl.git")
+Pkg.add("https://github.com/ufechner7/PkgHelpers.jl")
 ```
 Then change to the project you want to freeze:  
 ```
