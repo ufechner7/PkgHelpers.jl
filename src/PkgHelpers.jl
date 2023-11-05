@@ -6,17 +6,20 @@ using Pkg, TOML
 export freeze
 
 """
-    freeze(julia="1")
+    freeze(julia=juliaversion())
 
 Freezes the current package versions by adding them to the Project.toml file.
 
 Parameters:
 
-- julia: version string for Julia compatibility, e.g. "1" or "~1.8, ~1.9, ~1.10"
+- julia:   version string for Julia compatibility, e.g. "1" or "~1.8, ~1.9, ~1.10"
+- relaxed: if set to `true`, the minor version number is omitted from the generated  
+           compat entries. This means, non-breaking minor updates are allowed.
 
 For strict compatibility only add the Julia versions you tested your project with.
+The parameters `status` and `mytoml` are internal and only needed for the unit tests.
 """
-function freeze(pkg; julia=juliaversion(), status="", mytoml="")
+function freeze(pkg; julia=juliaversion(), relaxed = false, status="", mytoml="")
     function printkv(io, dict, key)
         if key in keys(dict)
             value = dict[key]
@@ -34,7 +37,7 @@ function freeze(pkg; julia=juliaversion(), status="", mytoml="")
             TOML.print(io, dict[key])
         end
     end
-    project_file, compat = project_compat(pkg; status=status)
+    project_file, compat = project_compat(pkg, relaxed; status=status)
     if mytoml != ""
         project_file = mytoml
     end
@@ -59,7 +62,7 @@ function freeze(pkg; julia=juliaversion(), status="", mytoml="")
 end
 
 """
-    project_compat(pkg, prin=false)
+    project_compat(pkg, prn=false)
 
 Create a dictionary of package dependencies and their current versions.
 
@@ -67,7 +70,7 @@ Returns the full file name of the Project.toml file and the dictionary
 `compat` that can be added to the Project.toml file to freeze the package
 versions.
 """
-function project_compat(pkg; prn=false, status="")
+function project_compat(pkg, relaxed; prn=false, status="")
     if status==""
         io = IOBuffer();
         pkg.status(; io)
@@ -87,6 +90,10 @@ function project_compat(pkg; prn=false, status="")
             if occursin(" v", pkg_vers)
                 pkg  = split(pkg_vers, " v")[1]
                 vers = split(pkg_vers, " v")[2]
+                if relaxed
+                    vers_array=split(vers, '.')
+                    vers=vers_array[1]*'.'*vers_array[2]
+                end
                 push!(compat, (String(pkg)=>String("~"*vers)))
             end
         end

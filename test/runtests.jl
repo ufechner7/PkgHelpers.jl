@@ -35,7 +35,7 @@ end
 st="Project PkgHelpers v0.1.0\nStatus `~/repos/PkgHelpers.jl/Project.toml`\n  [44cfe95a] Pkg v1.10.0\n  [fa267f1f] TOML v1.0.3\n"
 
 @testset "PkgHelpers.jl" begin
-    project_file, compat = PkgHelpers.project_compat(Pkg; status=st)
+    project_file, compat = PkgHelpers.project_compat(Pkg, false; status=st)
     @test isabspath(project_file)
     @test basename(project_file) == "Project.toml"
     @test haskey(compat, "TOML")
@@ -46,5 +46,19 @@ st="Project PkgHelpers v0.1.0\nStatus `~/repos/PkgHelpers.jl/Project.toml`\n  [4
     mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
     freeze(nothing; julia="~1.10", status=st, mytoml=mytoml)
+    @test filecmp(filename2, mytoml)
+end
+@testset "PkgHelpers - relaxed" begin
+    project_file, compat = PkgHelpers.project_compat(Pkg, true; status=st)
+    @test isabspath(project_file)
+    @test basename(project_file) == "Project.toml"
+    @test haskey(compat, "TOML")
+    @test haskey(compat, "Pkg")
+    mydir = tempdir()
+    filename = "test-1.toml"
+    filename2 = "test-3.toml"
+    mytoml = joinpath(mydir, filename)
+    cp(filename, mytoml, force=true)
+    freeze(nothing; julia="~1.10", relaxed=true, status=st, mytoml=mytoml)
     @test filecmp(filename2, mytoml)
 end
