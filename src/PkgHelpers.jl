@@ -14,7 +14,18 @@ function freeze()
     function printkv(io, dict, key)
         if key in keys(dict)
             value = dict[key]
-            println(io, "$key = \"", value, "\"")
+            if key == "authors"
+                println(io, "$key = ", value)
+            else
+                println(io, "$key = \"", value, "\"")
+            end
+        end
+    end
+    function print_section(io, dict, key)
+        if key in keys(dict)
+            println(io)
+            println(io, "[$(key)]")
+            TOML.print(io, dict[key])
         end
     end
     project_file, compat = project_compat()
@@ -25,12 +36,12 @@ function freeze()
             printkv(io, dict, "uuid")
             printkv(io, dict, "authors")
             printkv(io, dict, "version")
-            println(io)
-            println(io, "[deps]")
-            TOML.print(io, dict["deps"])
+            print_section(io, dict, "deps")
             println(io)
             println(io, "[compat]")
             TOML.print(io, compat)
+            print_section(io, dict, "extras")
+            print_section(io, dict, "targets")
         end
     end
     println("Added $(compat.count) entries to the compat section!")
