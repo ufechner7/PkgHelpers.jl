@@ -4,7 +4,9 @@
 
 ## Introduction
 This package provides the function `freeze()` to freeze your Julia environment by adding
-the current versions of your package environment to the `[compat]` section of your project.
+the current versions of your package environment to the `[compat]` section of your project.  
+If a `[compat]` section already exists it is overwritten without warning, so make a backup
+of your `Project.toml` file first.
 
 ## Installation
 
