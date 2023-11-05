@@ -12,14 +12,17 @@ Freezes the current package versions by adding them to the Project.toml file.
 """
 function freeze()
     project_file, compat = project_compat()
-    deps = (TOML.parsefile(project_file))["deps"]
-    open(project_file, "w") do io
-        println(io, "[deps]")
-        TOML.print(io, deps)
-        println(io)
-        println(io, "[compat]")
-        TOML.print(io, compat)
+    if compat.count > 0
+        deps = (TOML.parsefile(project_file))["deps"]
+        open(project_file, "w") do io
+            println(io, "[deps]")
+            TOML.print(io, deps)
+            println(io)
+            println(io, "[compat]")
+            TOML.print(io, compat)
+        end
     end
+    println("Added $(compat.count) entries to the compat section!")
     nothing
 end
 
@@ -32,7 +35,7 @@ Returns the full file name of the Project.toml file and the dictionary
 `compat` that can be added to the Project.toml file to freeze the package
 versions.
 """
-function project_compat()
+function project_compat(prn=false)
     io = IOBuffer();
     Pkg.status(; io)
     st = String(take!(io))
@@ -40,13 +43,16 @@ function project_compat()
     project_file=""
     compat = Dict{String, Any}()
     for line in eachline(IOBuffer(st))
-        if i == 1
+        if prn; println(line); end
+        if occursin(".toml", line)
             project_file=line
-        else
+        elseif occursin("] ", line)
             pkg_vers = split(line, "] ")[2]
-            pkg  = split(pkg_vers, " v")[1]
-            vers = split(pkg_vers, " v")[2]
-            push!(compat, (String(pkg)=>String("~"*vers)))
+            if occursin(" v", pkg_vers)
+                pkg  = split(pkg_vers, " v")[1]
+                vers = split(pkg_vers, " v")[2]
+                push!(compat, (String(pkg)=>String("~"*vers)))
+            end
         end
         i += 1
     end
