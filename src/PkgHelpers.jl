@@ -13,8 +13,8 @@ Adds the current package versions as lower bound to the compat section of the Pr
 Parameters:
     
     - julia:   version string for Julia compatibility, e.g. "1" or "1.8"
-    - relaxed: if set to `true`, the minor version number is omitted from the generated  
-               compat entries.
+    - relaxed: if set to `true`, the minor version number is omitted  
+      from the generated compat entries.
 """
 function lower_bound(pkg; julia=juliaversion(true), relaxed = false)
     freeze1(pkg; julia, relaxed, lowerbound=true)
