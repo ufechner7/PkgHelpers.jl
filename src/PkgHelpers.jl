@@ -16,7 +16,7 @@ Parameters:
 
 For strict compatibility only add the Julia versions you tested your project with.
 """
-function freeze(pkg; julia="1")
+function freeze(pkg; julia=juliaversion())
     function printkv(io, dict, key)
         if key in keys(dict)
             value = dict[key]
@@ -89,11 +89,16 @@ function project_compat(pkg, prn=false)
     project_file, compat
 end
 
-function test(mod)
+function test(mod::Module)
     io = IOBuffer();
     mod.status(; io)
     st = String(take!(io))
     println(st)
+end
+
+function juliaversion()
+    res=VERSION
+    "~" * repr(Int64(res.major)) * "." * repr(Int64(res.minor))
 end
 
 

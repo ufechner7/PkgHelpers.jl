@@ -36,7 +36,7 @@ julia --project
 and on the Julia prompt type
 ```julia
 using PkgHelpers, Pkg
-freeze(Pkg; julia="1")
+freeze(Pkg; julia=juliaversion())
 ```
 This will overwrite your current `Project.toml`, so make sure you committed it to git before calling this function.
 
