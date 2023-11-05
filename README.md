@@ -31,3 +31,10 @@ If you tested your project with the Julia versions 1.9 and 1.10, use the call
 ```julia
 freeze(Pkg; julia="~1.9, ~1.10")
 ```
+You can also use ranges, e.g.
+```julia
+freeze(Pkg; julia="1.6 - 1.11")
+```
+If you use a range there must be a space around the hyphen.
+
+More info about the version specifiers can be found [here](https://pkgdocs.julialang.org/v1/compatibility/).
