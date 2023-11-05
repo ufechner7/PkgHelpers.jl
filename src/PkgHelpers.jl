@@ -11,12 +11,17 @@ export freeze
 Freezes the current package versions by adding them to the Project.toml file.
 """
 function freeze()
+    function printkv(io, dict, key)
+        value = dict[key]
+        println(io, "$key = \"", value, "\"")
+    end
     project_file, compat = project_compat()
     if compat.count > 0
-        deps = (TOML.parsefile(project_file))["deps"]
+        dict = (TOML.parsefile(project_file))
         open(project_file, "w") do io
+            println(io, "name = \"", dict["name"], "\"")
             println(io, "[deps]")
-            TOML.print(io, deps)
+            TOML.print(io, dict["deps"])
             println(io)
             println(io, "[compat]")
             TOML.print(io, compat)
