@@ -14,13 +14,18 @@ using Pkg
 Pkg.add("https://github.com/ufechner7/PkgHelpers.jl")
 ```
 Then change to the project you want to freeze:  
-```
+```bash
 cd MyProject
 julia --project
 ```
 and on the Julia prompt type
 ```julia
 using PkgHelpers
-freeze()
+freeze(julia="1")
 ```
 This will overwrite your current `Project.toml`, so make sure you committed it to git before calling this function.
+
+If you tested your project with the Julia versions 1.9 and 1.10, use the call
+```julia
+freeze(julia="~1.9, ~1.10")
+```
