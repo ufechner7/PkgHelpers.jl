@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [[ $(basename $(pwd)) == "bin" ]]; then
+    cd ..
+fi
+if [[ $HOSTNAME == "tuxedi" ]]; then
+    sudo performance.sh
+fi
+
+julia --project -i -q --threads 4 -i -e "using Revise"
