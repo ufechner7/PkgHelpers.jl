@@ -8,6 +8,17 @@ the current versions of your package environment to the `[compat]` section of yo
 If a `[compat]` section already exists it is overwritten without warning, so make a backup
 of your `Project.toml` file first.
 
+## Background
+For reproducible research it is important to document the version of all packages you used to
+achieve a result that you published in a paper. This package makes it easy to do this. Compared to committing the `Manifest.toml` this approach has the following advantages:
+
+- the project stays compatible with different Julia versions;
+- changes in the git log are readable (I find the Manifest.toml file unreadable, YMMV).
+
+Freezing your package versions has one more advantage: It can avoid unwanted package updates
+when adding new packages to your project.
+
+
 ## Installation
 
 Add it to your global environment:  
