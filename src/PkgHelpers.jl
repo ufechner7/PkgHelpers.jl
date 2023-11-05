@@ -12,14 +12,20 @@ Freezes the current package versions by adding them to the Project.toml file.
 """
 function freeze()
     function printkv(io, dict, key)
-        value = dict[key]
-        println(io, "$key = \"", value, "\"")
+        if key in keys(dict)
+            value = dict[key]
+            println(io, "$key = \"", value, "\"")
+        end
     end
     project_file, compat = project_compat()
     if compat.count > 0
         dict = (TOML.parsefile(project_file))
         open(project_file, "w") do io
-            println(io, "name = \"", dict["name"], "\"")
+            printkv(io, dict, "name")
+            printkv(io, dict, "uuid")
+            printkv(io, dict, "authors")
+            printkv(io, dict, "version")
+            println(io)
             println(io, "[deps]")
             TOML.print(io, dict["deps"])
             println(io)
