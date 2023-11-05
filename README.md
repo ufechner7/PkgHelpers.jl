@@ -22,8 +22,8 @@ julia --project
 ```
 and on the Julia prompt type
 ```julia
-using PkgHelpers
-freeze(julia="1")
+using PkgHelpers, Pkg
+freeze(Pkg, julia="1")
 ```
 This will overwrite your current `Project.toml`, so make sure you committed it to git before calling this function.
 

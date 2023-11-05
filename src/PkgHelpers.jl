@@ -16,7 +16,7 @@ Parameters:
 
 For strict compatibility only add the Julia versions you tested your project with.
 """
-function freeze(julia="1")
+function freeze(pkg, julia="1")
     function printkv(io, dict, key)
         if key in keys(dict)
             value = dict[key]
@@ -34,7 +34,7 @@ function freeze(julia="1")
             TOML.print(io, dict[key])
         end
     end
-    project_file, compat = project_compat()
+    project_file, compat = project_compat(pkg)
     if compat.count > 0
         dict = (TOML.parsefile(project_file))
         push!(compat, ("julia" => julia))
@@ -56,7 +56,7 @@ function freeze(julia="1")
 end
 
 """
-    project_compat()
+    project_compat(pkg, prin=false)
 
 Create a dictionary of package dependencies and their current versions.
 
@@ -64,9 +64,9 @@ Returns the full file name of the Project.toml file and the dictionary
 `compat` that can be added to the Project.toml file to freeze the package
 versions.
 """
-function project_compat(prn=false)
+function project_compat(pkg, prn=false)
     io = IOBuffer();
-    Pkg.status(; io)
+    pkg.status(; io)
     st = String(take!(io))
     i = 1
     project_file=""
