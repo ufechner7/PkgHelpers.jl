@@ -45,6 +45,6 @@ st="Project PkgHelpers v0.1.0\nStatus `~/repos/PkgHelpers.jl/Project.toml`\n  [4
     filename2 = "test-2.toml"
     mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
-    freeze(nothing; status=st, mytoml=mytoml)
+    freeze(nothing; julia="~1.10", status=st, mytoml=mytoml)
     @test filecmp(filename2, mytoml)
 end
