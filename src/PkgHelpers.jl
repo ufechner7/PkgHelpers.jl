@@ -16,7 +16,7 @@ Parameters:
 
 For strict compatibility only add the Julia versions you tested your project with.
 """
-function freeze(pkg, julia="1")
+function freeze(pkg; julia="1")
     function printkv(io, dict, key)
         if key in keys(dict)
             value = dict[key]
