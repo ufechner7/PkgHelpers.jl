@@ -3,7 +3,7 @@ module PkgHelpers
 # freeze the current package versions; overwrites the current Project.toml file
 using Pkg, TOML
 
-export freeze
+export freeze, create_project
 
 """
     freeze(julia=juliaversion())
@@ -113,6 +113,13 @@ end
 function juliaversion()
     res=VERSION
     "~" * repr(Int64(res.major)) * "." * repr(Int64(res.minor))
+end
+
+function create_project(name, packages=[])
+    mkdir(name)
+    cd(name)
+    Pkg.activate(".")
+    Pkg.status()
 end
 
 end
