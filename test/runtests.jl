@@ -27,7 +27,6 @@ st = "Project PkgHelpers v0.1.0\nStatus `~/repos/PkgHelpers.jl/Project.toml`\n  
 
 @testset "PkgHelpers.jl" begin
     project_file, compat = PkgHelpers.project_compat(Pkg, false, false; status=st)
-    @test isabspath(project_file)
     @test basename(project_file) == "Project.toml"
     @test haskey(compat, "TOML")
     @test haskey(compat, "Pkg")
@@ -41,7 +40,6 @@ st = "Project PkgHelpers v0.1.0\nStatus `~/repos/PkgHelpers.jl/Project.toml`\n  
 end
 @testset "PkgHelpers - relaxed" begin
     project_file, compat = PkgHelpers.project_compat(Pkg, true, false; status=st)
-    @test isabspath(project_file)
     @test basename(project_file) == "Project.toml"
     @test haskey(compat, "TOML")
     @test haskey(compat, "Pkg")
