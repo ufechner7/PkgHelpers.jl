@@ -64,3 +64,16 @@ end
     PkgHelpers.freeze1(nothing; julia="1.6", lowerbound=true, status=st, mytoml=mytoml)
     @test tomlcmp(filename2, mytoml)
 end
+@testset "lower_bound - relaxed" begin
+    project_file, compat = PkgHelpers.project_compat(Pkg, false, false; status=st)
+    @test basename(project_file) == "Project.toml"
+    @test haskey(compat, "TOML")
+    @test haskey(compat, "Pkg")
+    mydir = tempdir()
+    filename = "test-1.toml"
+    filename2 = "test-5.toml"
+    mytoml = joinpath(mydir, filename)
+    cp(filename, mytoml, force=true)
+    PkgHelpers.freeze1(nothing; julia="1.6", relaxed=true, lowerbound=true, status=st, mytoml=mytoml)
+    @test tomlcmp(filename2, mytoml)
+end
