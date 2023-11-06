@@ -25,7 +25,7 @@ end
 
 st = "Project PkgHelpers v0.1.0\nStatus `~/repos/PkgHelpers.jl/Project.toml`\n  [44cfe95a] Pkg v1.10.0\n  [fa267f1f] TOML v1.0.3\n"
 
-@testset "PkgHelpers.jl" begin
+@testset "freeze" begin
     project_file, compat = PkgHelpers.project_compat(Pkg, false, false; status=st)
     @test basename(project_file) == "Project.toml"
     @test haskey(compat, "TOML")
@@ -38,7 +38,7 @@ st = "Project PkgHelpers v0.1.0\nStatus `~/repos/PkgHelpers.jl/Project.toml`\n  
     PkgHelpers.freeze1(nothing; julia="~1.10", status=st, mytoml=mytoml)
     @test tomlcmp(filename2, mytoml)
 end
-@testset "PkgHelpers - relaxed" begin
+@testset "freeze - relaxed" begin
     project_file, compat = PkgHelpers.project_compat(Pkg, true, false; status=st)
     @test basename(project_file) == "Project.toml"
     @test haskey(compat, "TOML")
@@ -49,5 +49,18 @@ end
     mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
     PkgHelpers.freeze1(nothing; julia="~1.10", relaxed=true, status=st, mytoml=mytoml)
+    @test tomlcmp(filename2, mytoml)
+end
+@testset "lower_bound" begin
+    project_file, compat = PkgHelpers.project_compat(Pkg, false, false; status=st)
+    @test basename(project_file) == "Project.toml"
+    @test haskey(compat, "TOML")
+    @test haskey(compat, "Pkg")
+    mydir = tempdir()
+    filename = "test-1.toml"
+    filename2 = "test-4.toml"
+    mytoml = joinpath(mydir, filename)
+    cp(filename, mytoml, force=true)
+    PkgHelpers.freeze1(nothing; julia="1.6", lowerbound=true, status=st, mytoml=mytoml)
     @test tomlcmp(filename2, mytoml)
 end
