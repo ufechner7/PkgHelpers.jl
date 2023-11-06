@@ -67,6 +67,8 @@ function freeze1(pkg; julia=juliaversion(), relaxed = false, lowerbound=false, s
             printkv(io, dict, "authors")
             printkv(io, dict, "version")
             print_section(io, dict, "deps")
+            print_section(io, dict, "weakdeps")
+            print_section(io, dict, "extensions")
             println(io)
             println(io, "[compat]")
             TOML.print(io, compat)
