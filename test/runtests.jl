@@ -1,6 +1,6 @@
 using PkgHelpers
 using Test
-using Pkg
+using Pkg, TOML
 
 function comp(vec1, vec2, n)
     for i in 1:n
@@ -11,28 +11,19 @@ function comp(vec1, vec2, n)
     true
 end
 
-function filecmp(path1::AbstractString, path2::AbstractString)
-    stat1, stat2 = stat(path1), stat(path2)
-    if !(isfile(stat1) && isfile(stat2)) || filesize(stat1) != filesize(stat2)
-        return false # or should it throw if a file doesn't exist?
+function tomlcmp(path1::AbstractString, path2::AbstractString)
+    dict1 = TOML.parsefile(path1)
+    dict2 = TOML.parsefile(path2)
+    for key in keys(dict1)
+        if repr(dict1[key])!=repr(dict2[key]); return false; end
     end
-    stat1 == stat2 && return true # same file
-    open(path1, "r") do file1
-        open(path2, "r") do file2
-            buf1 = Vector{UInt8}(undef, 32768)
-            buf2 = similar(buf1)
-            while !eof(file1) && !eof(file2)
-                n1 = readbytes!(file1, buf1)
-                n2 = readbytes!(file2, buf2)
-                n1 != n2 && return false
-                if ! comp(buf1, buf2, n1); return false; end
-            end
-            return eof(file1) == eof(file2)
-        end
+    for key in keys(dict2)
+        if repr(dict1[key])!=repr(dict2[key]); return false; end
     end
+    true
 end
 
-st="Project PkgHelpers v0.1.0\nStatus `~/repos/PkgHelpers.jl/Project.toml`\n  [44cfe95a] Pkg v1.10.0\n  [fa267f1f] TOML v1.0.3\n"
+st = "Project PkgHelpers v0.1.0\nStatus `~/repos/PkgHelpers.jl/Project.toml`\n  [44cfe95a] Pkg v1.10.0\n  [fa267f1f] TOML v1.0.3\n"
 
 @testset "PkgHelpers.jl" begin
     project_file, compat = PkgHelpers.project_compat(Pkg, false, false; status=st)
@@ -46,7 +37,7 @@ st="Project PkgHelpers v0.1.0\nStatus `~/repos/PkgHelpers.jl/Project.toml`\n  [4
     mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
     PkgHelpers.freeze1(nothing; julia="~1.10", status=st, mytoml=mytoml)
-    @test filecmp(filename2, mytoml)
+    @test tomlcmp(filename2, mytoml)
 end
 @testset "PkgHelpers - relaxed" begin
     project_file, compat = PkgHelpers.project_compat(Pkg, true, false; status=st)
@@ -60,5 +51,5 @@ end
     mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
     PkgHelpers.freeze1(nothing; julia="~1.10", relaxed=true, status=st, mytoml=mytoml)
-    @test filecmp(filename2, mytoml)
+    @test tomlcmp(filename2, mytoml)
 end

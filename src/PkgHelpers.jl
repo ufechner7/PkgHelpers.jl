@@ -87,7 +87,7 @@ Returns the full file name of the Project.toml file and the dictionary
 `compat` that can be added to the Project.toml file to freeze the package
 versions.
 """
-function project_compat(pkg, relaxed,lowerbound; prn=false, status="")
+function project_compat(pkg, relaxed, lowerbound; prn=false, status="")
     if status==""
         io = IOBuffer();
         pkg.status(; io)
