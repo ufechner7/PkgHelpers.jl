@@ -3,11 +3,8 @@
 [![Build Status](https://github.com/ufechner7/PkgHelpers.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/ufechner7/PkgHelpers.jl/actions/workflows/CI.yml?query=branch%3Amain)
 
 ## Introduction
-This package provides the functions `freeze()` to freeze your Julia environment by adding
-the current versions of your package environment to the `[compat]` section of your project,
-and the function `lower_bound()` to set a lower bound of the versions of your packages.
-If a `[compat]` section already exists it is overwritten without warning, so make a backup
-of your `Project.toml` file first.
+This package provides the functions `freeze()` to freeze your Julia environment by adding the current versions of your package environment to the `[compat]` section of your project, and the function `lower_bound()` to set a lower bound of the versions of your packages.
+If a `[compat]` section already exists it is overwritten without warning, so make a backup of your `Project.toml` file first.
 
 ### Background
 For reproducible research it is important to document the version of all packages you used to
@@ -16,8 +13,7 @@ achieve a result that you published in a paper. This package makes it easy to do
 - the project stays compatible with different Julia versions;
 - changes in the git log are readable (I find the Manifest.toml file unreadable, YMMV).
 
-Freezing your package versions has one more advantage: It can avoid unwanted package updates
-when adding new packages to your project.
+Freezing your package versions has one more advantage: It can avoid unwanted package updates when adding new packages to your project.
 
 
 ## Installation
@@ -64,8 +60,6 @@ You can also call:
 ```julia
 freeze(Pkg; relaxed=true)
 ```
-This omits the patch version from the generated `compat` entry. The effect is that non-braking
-updates of the packages are allowed. While updates of the patch version SHOULD be non-braking,
-this is not always the case. Use this option with care.
+This omits the patch version from the generated `compat` entry. The effect is that non-braking updates of the packages are allowed. While updates of the patch version SHOULD be non-braking, this is not always the case. Use this option with care.
 
 More info about the version specifiers can be found [here](https://pkgdocs.julialang.org/v1/compatibility/).
