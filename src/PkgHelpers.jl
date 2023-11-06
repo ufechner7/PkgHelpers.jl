@@ -1,6 +1,5 @@
 module PkgHelpers
 
-# freeze the current package versions; overwrites the current Project.toml file
 using Pkg, TOML
 
 export freeze, lower_bound
@@ -80,7 +79,7 @@ function freeze1(pkg; julia=juliaversion(), relaxed = false, lowerbound=false, s
 end
 
 """
-    project_compat(pkg, prn=false)
+    project_compat(pkg,relaxed,lowerbound; prn=false, status="")
 
 Create a dictionary of package dependencies and their current versions.
 
@@ -88,7 +87,7 @@ Returns the full file name of the Project.toml file and the dictionary
 `compat` that can be added to the Project.toml file to freeze the package
 versions.
 """
-function project_compat(pkg, relaxed, lowerbound; prn=false, status="")
+function project_compat(pkg, relaxed,lowerbound; prn=false, status="")
     if status==""
         io = IOBuffer();
         pkg.status(; io)
@@ -123,13 +122,6 @@ function project_compat(pkg, relaxed, lowerbound; prn=false, status="")
     end
     project_file = expanduser(split(project_file,'`')[2])
     project_file, compat
-end
-
-function test(mod::Module)
-    io = IOBuffer();
-    mod.status(; io)
-    st = String(take!(io))
-    println(st)
 end
 
 function juliaversion(lowerbound=false)
