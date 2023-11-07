@@ -115,8 +115,10 @@ function project_compat(pkg, relaxed, lowerbound; prn=false, status="")
                 end
                 if lowerbound
                     push!(compat, (String(pkg)=>String(vers)))
-                else
+                elseif relaxed
                     push!(compat, (String(pkg)=>String("~"*vers)))
+                else
+                    push!(compat, (String(pkg)=>String("="*vers)))
                 end
             end
         end
