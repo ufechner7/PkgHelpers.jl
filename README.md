@@ -42,6 +42,15 @@ lower_bound(Pkg)
 ```
 This will overwrite your current `Project.toml`, so make sure you committed it to git before calling this function.
 
+The following compat entries will be added for each of your direct dependencies:
+
+| function                      | compat entry | range          | specifier  |
+|-------------------------------|:------------:|:--------------:|:----------:|
+| freeze(Pkg)                   | "=1.2.3"     | [1.2.3, 1.2.3] | equality   |
+| freeze(Pkg; relax=true)       | "~1.2.3"     | [1.2.3, 1.3.0) | tilde      |
+| lower_bound(Pkg)              | "1.2.3"      | [1.2.3, 2.0.0) | caret      |
+| lower_bound(Pkg; relax=true)  | "1.2"        | [1.2.0, 2.0.0) | caret      |
+
 If you tested your project with the Julia versions 1.9 and 1.10, use the call
 ```julia
 freeze(Pkg; julia="~1.9, ~1.10")
