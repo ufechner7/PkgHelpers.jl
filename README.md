@@ -21,7 +21,7 @@ Freezing your package versions has one more advantage: It can avoid unwanted pac
 Add it to your global environment:  
 ```julia
 using Pkg
-Pkg.add("https://github.com/ufechner7/PkgHelpers.jl")
+Pkg.add("PkgHelpers")
 ```
 ## Usage
 
