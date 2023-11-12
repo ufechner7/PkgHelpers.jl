@@ -9,28 +9,41 @@ export freeze, lower_bound
 
 Adds the current package versions as lower bound to the compat section of the Project.toml file.
 
-Parameters:
-    
+# Arguments
+    - pkg:     the module Pkg
     - julia:   version string for Julia compatibility, e.g. "1" or "1.8"
     - relaxed: if set to `true`, the minor version number is omitted  
       from the generated compat entries.
+
+# Examples
+```julia-repl
+using Pkg
+lower_bound(Pkg)
+```
 """
 function lower_bound(pkg; julia=juliaversion(true), relaxed = false)
     freeze1(pkg; julia, relaxed, lowerbound=true)
 end
 
 """
-    freeze(julia=juliaversion())
+    freeze(pkg; julia=juliaversion(), relaxed = false)
 
 Freezes the current package versions by adding them to the Project.toml file.
 
-Parameters:
+# Arguments
 
+- pkg:     the module Pkg
 - julia:   version string for Julia compatibility, e.g. "1" or "~1.8, ~1.9, ~1.10"
 - relaxed: if set to `true`, the minor version number is omitted from the generated  
            compat entries. This means, non-breaking minor updates are allowed.
 
 For strict compatibility only add the Julia versions you tested your project with.
+
+# Examples
+```julia-repl
+using Pkg
+freeze(Pkg)
+```
 """
 function freeze(pkg; julia=juliaversion(), relaxed = false)
     freeze1(pkg; julia, relaxed)
