@@ -21,7 +21,10 @@ using Pkg
 lower_bound(Pkg)
 ```
 """
-function lower_bound(pkg; julia=juliaversion(true), relaxed = false)
+function lower_bound(pkg; julia=nothing, relaxed = false)
+    if isnothing(julia)
+        julia = juliaversion(true)
+    end
     freeze1(pkg; julia, relaxed, lowerbound=true)
 end
 
@@ -45,11 +48,14 @@ using Pkg
 freeze(Pkg)
 ```
 """
-function freeze(pkg; julia=juliaversion(), relaxed = false)
+function freeze(pkg; julia=nothing, relaxed = false)
+    if isnothing(julia)
+        julia = juliaversion()
+    end
     freeze1(pkg; julia, relaxed)
 end
 
-function freeze1(pkg; julia=juliaversion(), relaxed = false, lowerbound=false, status="", mytoml="")
+function freeze1(pkg; julia=nothing, relaxed = false, lowerbound=false, status="", mytoml="")
     function printkv(io, dict, key)
         if key in keys(dict)
             value = dict[key]
@@ -66,6 +72,9 @@ function freeze1(pkg; julia=juliaversion(), relaxed = false, lowerbound=false, s
             println(io, "[$(key)]")
             TOML.print(io, dict[key])
         end
+    end
+    if isnothing(julia)
+        julia=juliaversion()
     end
     project_file, compat = project_compat(pkg, relaxed, lowerbound; status=status)
     if mytoml != ""
