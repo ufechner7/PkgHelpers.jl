@@ -25,7 +25,7 @@ function lower_bound(pkg; julia=nothing, relaxed = false)
     if isnothing(julia)
         julia = juliaversion(true)
     end
-    freeze1(pkg; julia, relaxed, lowerbound=true)
+    freeze1(pkg; julia=julia, relaxed=relaxed, lowerbound=true)
 end
 
 """
@@ -52,7 +52,7 @@ function freeze(pkg; julia=nothing, relaxed = false)
     if isnothing(julia)
         julia = juliaversion()
     end
-    freeze1(pkg; julia, relaxed)
+    freeze1(pkg; julia=julia, relaxed=relaxed)
 end
 
 function freeze1(pkg; julia=nothing, relaxed = false, lowerbound=false, status="", mytoml="")
