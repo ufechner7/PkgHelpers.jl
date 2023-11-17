@@ -114,7 +114,7 @@ versions.
 function project_compat(pkg, relaxed, lowerbound; prn=false, status="")
     if status==""
         io = IOBuffer();
-        pkg.status(; io)
+        pkg.status(; io=io)
         st = String(take!(io))
     else
         st = status
