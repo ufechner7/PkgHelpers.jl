@@ -1,5 +1,5 @@
 # PkgHelpers
-
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://ufechner7.github.io/PkgHelpers.jl/dev)
 [![Build Status](https://github.com/ufechner7/PkgHelpers.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/ufechner7/PkgHelpers.jl/actions/workflows/CI.yml?query=branch%3Amain)
 
 ## Introduction
