@@ -59,6 +59,13 @@ If you want to set as lower bound an older Julia version, you can also do that:
 ```julia
 lower_bound(Pkg; julia="1.6")
 ```
+Optionally you can also call the function:
+```
+copy_manifest()
+```
+which creates a copy of the Manifest.toml file which includes the Julia version number
+and operating system name and add and commit this file to git.
+
 You can also use ranges, e.g.
 ```julia
 freeze(Pkg; julia="1.6 - 1.11")
