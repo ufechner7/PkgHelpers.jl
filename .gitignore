@@ -1,3 +1,4 @@
 /Manifest.toml
 .vscode/settings.json
 /docs/build
+docs/src/index.md

@@ -190,4 +190,16 @@ function copy_manifest()
     println("Created the file $(backup), please commit and push it to git!")
 end
 
+"""
+    docu()
+
+Display the HTLM documentation in a browser window.
+"""
+function docu()
+    if Sys.islinux()
+        Base.run(`xdg-open "docs/build/index.html"`; wait=false)
+    end
+    nothing
+end
+
 end

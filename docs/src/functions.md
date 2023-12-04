@@ -16,4 +16,5 @@ copy_manifest
 ```@docs
 project_compat
 juliaversion
+docu
 ```
