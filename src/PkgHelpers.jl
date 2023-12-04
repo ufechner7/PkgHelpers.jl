@@ -70,7 +70,7 @@ function freeze1(pkg; julia=nothing, relaxed = false, lowerbound=false, status="
         if key in keys(dict)
             println(io)
             println(io, "[$(key)]")
-            TOML.print(io, dict[key])
+            TOML.print(io, dict[key]; sorted=true, by=identity)
         end
     end
     if isnothing(julia)
