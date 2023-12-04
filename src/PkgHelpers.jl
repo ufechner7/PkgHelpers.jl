@@ -2,7 +2,7 @@ module PkgHelpers
 
 using Pkg, TOML
 
-export freeze, lower_bound
+export freeze, lower_bound, copy_manifest
 
 """
     lower_bound(pkg; julia=nothing, relaxed = false)
@@ -110,6 +110,8 @@ Create a dictionary of package dependencies and their current versions.
 Returns the full file name of the Project.toml file and the dictionary
 `compat` that can be added to the Project.toml file to freeze the package
 versions.
+
+Returns the tuple (project_file, compat).
 """
 function project_compat(pkg, relaxed, lowerbound; prn=false, status="")
     if status==""
@@ -150,6 +152,12 @@ function project_compat(pkg, relaxed, lowerbound; prn=false, status="")
     project_file, compat
 end
 
+"""
+    juliaversion(lowerbound=false)
+
+Returns the version number in the form "~1.10" by default and in the form
+"1.10" when called with the parameter `true`.
+"""
 function juliaversion(lowerbound=false)
     res=VERSION
     res = repr(Int64(res.major)) * "." * repr(Int64(res.minor))
@@ -157,6 +165,29 @@ function juliaversion(lowerbound=false)
         res = "~" * res
     end
     res
+end
+
+"""
+    copy_manifest()
+
+Create a copy of the current manifest, using a naming scheme like "Manifest.toml-1.10-windows"
+which includes the major Julia version number and the name of the operating system to be
+added and committed to git as backup.
+"""
+function copy_manifest()
+    local os
+    if Sys.iswindows()
+        os = "-windows"
+    elseif Sys.islinux()
+        os = "-linux"
+    else
+        os = "-apple"
+    end
+    # check julia version
+    ver = repr(Int64(VERSION.major)) * "." * repr(Int64(VERSION.minor))
+    backup = "Manifest.toml-" * ver * os
+    cp("Manifest.toml", backup; force=true)
+    println("Created the file $(backup), please commit and push it to git!")
 end
 
 end
