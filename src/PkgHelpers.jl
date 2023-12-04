@@ -93,7 +93,7 @@ function freeze1(pkg; julia=nothing, relaxed = false, lowerbound=false, status="
             print_section(io, dict, "extensions")
             println(io)
             println(io, "[compat]")
-            TOML.print(io, compat)
+            TOML.print(io, compat; sorted=true, by=identity)
             print_section(io, dict, "extras")
             print_section(io, dict, "targets")
         end
