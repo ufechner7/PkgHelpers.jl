@@ -5,15 +5,17 @@ using Pkg, TOML
 export freeze, lower_bound, copy_manifest
 
 """
-    lower_bound(pkg; julia=nothing, relaxed = false)
+    lower_bound(pkg; julia=nothing, relaxed = false, copy_manifest=false)
 
 Adds the current package versions as lower bound to the compat section of the Project.toml file.
 
 # Arguments
-    - pkg:     the module Pkg
-    - julia:   version string for Julia compatibility, e.g. "1" or "1.8"
-    - relaxed: if set to `true`, the minor version number is omitted  
-      from the generated compat entries.
+- pkg:           the module Pkg
+- julia:         version string for Julia compatibility, e.g. "1" or "1.8"
+- relaxed:       if set to `true`, the minor version number is omitted  
+                 from the generated compat entries.
+- copy_manifest: if `true`, create a copy of the current `Manifest.toml` file using
+                 a naming scheme like "Manifest.toml-1.10-windows"
 
 # Examples
 ```julia-repl
@@ -21,24 +23,29 @@ using Pkg
 lower_bound(Pkg)
 ```
 """
-function lower_bound(pkg; julia=nothing, relaxed = false)
+function lower_bound(pkg; julia=nothing, relaxed = false, copy_manifest=false)
     if isnothing(julia)
         julia = juliaversion(true)
     end
     freeze1(pkg; julia=julia, relaxed=relaxed, lowerbound=true)
+    if copy_manifest
+        copy_manifest()
+    end
 end
 
 """
-    freeze(pkg; julia=juliaversion(), relaxed = false)
+    freeze(pkg; julia=juliaversion(), relaxed = false, copy_manifest=false)
 
 Freezes the current package versions by adding them to the Project.toml file.
 
 # Arguments
 
-- pkg:     the module Pkg
-- julia:   version string for Julia compatibility, e.g. "1" or "~1.8, ~1.9, ~1.10"
-- relaxed: if set to `true`, the minor version number is omitted from the generated  
-           compat entries. This means, non-breaking minor updates are allowed.
+- pkg:           the module Pkg
+- julia:         version string for Julia compatibility, e.g. "1" or "~1.8, ~1.9, ~1.10"
+- relaxed:       if set to `true`, the minor version number is omitted from the generated  
+                 compat entries. This means, non-breaking minor updates are allowed.
+- copy_manifest: if `true`, create a copy of the current `Manifest.toml` file using
+                 a naming scheme like "Manifest.toml-1.10-windows"
 
 For strict compatibility only add the Julia versions you tested your project with.
 
@@ -48,11 +55,14 @@ using Pkg
 freeze(Pkg)
 ```
 """
-function freeze(pkg; julia=nothing, relaxed = false)
+function freeze(pkg; julia=nothing, relaxed = false, copy_manifest=false)
     if isnothing(julia)
         julia = juliaversion()
     end
     freeze1(pkg; julia=julia, relaxed=relaxed)
+    if copy_manifest
+        copy_manifest()
+    end
 end
 
 function freeze1(pkg; julia=nothing, relaxed = false, lowerbound=false, status="", mytoml="")
