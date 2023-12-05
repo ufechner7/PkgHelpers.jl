@@ -29,7 +29,7 @@ function lower_bound(pkg; julia=nothing, relaxed = false, copy_manifest=false)
     end
     freeze1(pkg; julia=julia, relaxed=relaxed, lowerbound=true)
     if copy_manifest
-        copy_manifest()
+        PkgHelpers.copy_manifest()
     end
 end
 
@@ -51,8 +51,9 @@ For strict compatibility only add the Julia versions you tested your project wit
 
 # Examples
 ```julia-repl
-using Pkg
-freeze(Pkg)
+using Pkg, PkgHelpers
+freeze(Pkg, copy_manifest=true)
+freeze(Pkg; julia="~1.9, ~1.10", copy_manifest=true)
 ```
 """
 function freeze(pkg; julia=nothing, relaxed = false, copy_manifest=false)
@@ -61,7 +62,7 @@ function freeze(pkg; julia=nothing, relaxed = false, copy_manifest=false)
     end
     freeze1(pkg; julia=julia, relaxed=relaxed)
     if copy_manifest
-        copy_manifest()
+        PkgHelpers.copy_manifest()
     end
 end
 
