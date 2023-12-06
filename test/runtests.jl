@@ -35,6 +35,7 @@ st = "Project PkgHelpers v0.1.0\nStatus `~/repos/PkgHelpers.jl/Project.toml`\n  
     filename2 = "test-2.toml"
     mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
+    chmod(mytoml, 0o777)
     PkgHelpers.freeze1(nothing; julia="~1.10", status=st, mytoml=mytoml)
     @test tomlcmp(filename2, mytoml)
 end
@@ -48,6 +49,7 @@ end
     filename2 = "test-3.toml"
     mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
+    chmod(mytoml, 0o777)
     PkgHelpers.freeze1(nothing; julia="~1.10", relaxed=true, status=st, mytoml=mytoml)
     @test tomlcmp(filename2, mytoml)
 end
@@ -61,6 +63,7 @@ end
     filename2 = "test-4.toml"
     mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
+    chmod(mytoml, 0o777)
     PkgHelpers.freeze1(nothing; julia="1.6", lowerbound=true, status=st, mytoml=mytoml)
     @test tomlcmp(filename2, mytoml)
 end
@@ -74,6 +77,7 @@ end
     filename2 = "test-5.toml"
     mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
+    chmod(mytoml, 0o777)
     PkgHelpers.freeze1(nothing; julia="1.6", relaxed=true, lowerbound=true, status=st, mytoml=mytoml)
     @test tomlcmp(filename2, mytoml)
 end
