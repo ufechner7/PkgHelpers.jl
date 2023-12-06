@@ -30,7 +30,7 @@ st = "Project PkgHelpers v0.1.0\nStatus `~/repos/PkgHelpers.jl/Project.toml`\n  
     @test basename(project_file) == "Project.toml"
     @test haskey(compat, "TOML")
     @test haskey(compat, "Pkg")
-    mydir = tempdir()
+    mydir = mktempdir()
     filename = "test-1.toml"
     filename2 = "test-2.toml"
     mytoml = joinpath(mydir, filename)
@@ -43,7 +43,7 @@ end
     @test basename(project_file) == "Project.toml"
     @test haskey(compat, "TOML")
     @test haskey(compat, "Pkg")
-    mydir = tempdir()
+    mydir = mktempdir()
     filename = "test-1.toml"
     filename2 = "test-3.toml"
     mytoml = joinpath(mydir, filename)
@@ -56,7 +56,7 @@ end
     @test basename(project_file) == "Project.toml"
     @test haskey(compat, "TOML")
     @test haskey(compat, "Pkg")
-    mydir = tempdir()
+    mydir = mktempdir()
     filename = "test-1.toml"
     filename2 = "test-4.toml"
     mytoml = joinpath(mydir, filename)
@@ -69,7 +69,7 @@ end
     @test basename(project_file) == "Project.toml"
     @test haskey(compat, "TOML")
     @test haskey(compat, "Pkg")
-    mydir = tempdir()
+    mydir = mktempdir()
     filename = "test-1.toml"
     filename2 = "test-5.toml"
     mytoml = joinpath(mydir, filename)
