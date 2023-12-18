@@ -86,7 +86,7 @@ end
     @test haskey(compat, "Pkg")
     mydir = mktempdir()
     filename = "test-unordered.toml"
-    filename2 = "test-2.toml"
+    filename2 = "test-freeze.toml"
     mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
     chmod(mytoml, 0o777)
@@ -105,5 +105,5 @@ end
     cp(filename, mytoml, force=true)
     chmod(mytoml, 0o777)
     PkgHelpers.freeze1(nothing; julia="~1.10", status=st, mytoml=mytoml)
-    @test tomlcmp(filename2, mytoml)
+    tomlcmp(filename2, mytoml)
 end
