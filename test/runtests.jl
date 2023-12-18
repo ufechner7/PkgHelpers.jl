@@ -104,6 +104,6 @@ end
     mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
     chmod(mytoml, 0o777)
-    PkgHelpers.freeze1(nothing; julia="~1.10", relaxed=true, status=st, mytoml=mytoml)
+    PkgHelpers.freeze1(nothing; julia="~1.10", status=st, mytoml=mytoml)
     @test tomlcmp(filename2, mytoml)
 end
