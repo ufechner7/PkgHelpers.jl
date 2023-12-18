@@ -8,8 +8,8 @@ Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 
 [compat]
-Pkg = "1.10"
 julia = "1.6"
+Pkg = "1.10"
 PkgCaret = "^1.2.3"
 PkgTilde = "~4.5.6"
 PkgEquality = "=7.8.9"
