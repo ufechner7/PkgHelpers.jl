@@ -93,3 +93,17 @@ end
     PkgHelpers.freeze1(nothing; julia="~1.10", status=st, mytoml=mytoml)
     tomlcmp(filename2, mytoml)
 end
+@testset "keep - freeze" begin
+    project_file, compat = PkgHelpers.project_compat(Pkg, true, false; status=st)
+    @test basename(project_file) == "Project.toml"
+    @test haskey(compat, "TOML")
+    @test haskey(compat, "Pkg")
+    mydir = mktempdir()
+    filename = "test-various-specifiers-in.toml"
+    filename2 = "test-various-specifiers-out.toml"
+    mytoml = joinpath(mydir, filename)
+    cp(filename, mytoml, force=true)
+    chmod(mytoml, 0o777)
+    PkgHelpers.freeze1(nothing; julia="~1.10", relaxed=true, status=st, mytoml=mytoml)
+    @test tomlcmp(filename2, mytoml)
+end
