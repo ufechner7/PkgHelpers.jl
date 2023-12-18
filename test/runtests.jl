@@ -15,10 +15,14 @@ function tomlcmp(path1::AbstractString, path2::AbstractString)
     dict1 = TOML.parsefile(path1)
     dict2 = TOML.parsefile(path2)
     for key in keys(dict1)
-        if repr(dict1[key])!=repr(dict2[key]); return false; end
+        if repr(dict1[key]) != repr(dict2[key])
+            return false
+        end
     end
     for key in keys(dict2)
-        if repr(dict1[key])!=repr(dict2[key]); return false; end
+        if repr(dict1[key]) != repr(dict2[key])
+            return false
+        end
     end
     true
 end
