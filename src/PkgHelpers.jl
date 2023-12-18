@@ -23,7 +23,7 @@ using Pkg
 lower_bound(Pkg)
 ```
 """
-function lower_bound(pkg; julia=nothing, relaxed = false, copy_manifest=false)
+function lower_bound(pkg; julia=nothing, relaxed = false, copy_manifest=false, keep=true)
     if isnothing(julia)
         julia = juliaversion(true)
     end
@@ -56,7 +56,7 @@ freeze(Pkg, copy_manifest=true)
 freeze(Pkg; julia="~1.9, ~1.10", copy_manifest=true)
 ```
 """
-function freeze(pkg; julia=nothing, relaxed = false, copy_manifest=false)
+function freeze(pkg; julia=nothing, relaxed = false, copy_manifest=false, keep=true)
     if isnothing(julia)
         julia = juliaversion()
     end
@@ -66,17 +66,19 @@ function freeze(pkg; julia=nothing, relaxed = false, copy_manifest=false)
     end
 end
 
-function freeze1(pkg; julia=nothing, relaxed = false, lowerbound=false, status="", mytoml="")
+function freeze1(pkg; julia=nothing, relaxed = false, lowerbound=false, status="", mytoml="", keep=true)
     if isnothing(julia)
         julia=juliaversion()
     end
-    project_file, compat = project_compat(pkg, relaxed, lowerbound; status=status)
+    project_file, prj_compat = project_compat(pkg, relaxed, lowerbound; status=status)
+    push!(prj_compat, ("julia" => julia))
     if mytoml != ""
         project_file = mytoml
     end
-    if compat.count > 0
+    if prj_compat.count > 0
         dict = TOML.parsefile(project_file)
-        push!(compat, ("julia" => julia))
+        ori_compat = Dict{String, String}(get(dict, "compat", ()))
+        compat = merge_compats(ori_compat, prj_compat; keep=keep)
         dict["compat"] = compat
         open(project_file, "w") do io
             TOML.print(io, dict; sorted=true, by=toml_order)
@@ -84,6 +86,14 @@ function freeze1(pkg; julia=nothing, relaxed = false, lowerbound=false, status="
     end
     println("Added $(compat.count) entries to the compat section!")
     nothing
+end
+
+function merge_compats(compat::Dict{String, String}, project_compat::Dict{String, String}; keep=true)
+    if keep
+        return merge(project_compat, compat)
+    else
+        return project_compat
+    end
 end
 
 """
@@ -107,7 +117,7 @@ function project_compat(pkg, relaxed, lowerbound; prn=false, status="")
     end
     i = 1
     project_file=""
-    compat = Dict{String, Any}()
+    compat = Dict{String, String}()
     for line in eachline(IOBuffer(st))
         if prn; println(line); end
         if occursin(".toml", line)
