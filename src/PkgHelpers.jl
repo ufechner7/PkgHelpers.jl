@@ -79,7 +79,7 @@ function freeze1(pkg; julia=nothing, relaxed = false, lowerbound=false, status="
         push!(compat, ("julia" => julia))
         dict["compat"] = compat
         open(project_file, "w") do io
-            TOML.print(io, dict; sorted=true, by=identity)
+            TOML.print(io, dict; sorted=true, by=toml_order)
         end
     end
     println("Added $(compat.count) entries to the compat section!")
@@ -184,6 +184,25 @@ function docu()
         Base.run(`xdg-open "docs/build/index.html"`; wait=false)
     end
     nothing
+end
+
+"""
+toml_order(key::AbstractString)
+
+Specify the correct order for the different items of the TOML files.
+"""
+function toml_order(key::S)::Union{Int, S} where {S<:AbstractString}
+    d = Dict{String, Int}(
+        "name" => 10,
+        "uuid" => 20,
+        "authors" => 30,
+        "version" => 40,
+        "deps" => 50,
+        "compat" => 60,
+        "extras" => 70,
+        "targets" => 80,
+    )
+    return get(d, key, key)
 end
 
 end
