@@ -17,4 +17,5 @@ copy_manifest
 project_compat
 juliaversion
 docu
+toml_order
 ```

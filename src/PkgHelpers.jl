@@ -177,7 +177,7 @@ end
 """
     docu()
 
-Display the HTLM documentation in a browser window.
+Display the HTML documentation in a browser window.
 """
 function docu()
     if Sys.islinux()
@@ -187,7 +187,7 @@ function docu()
 end
 
 """
-    toml_order(key::AbstractString)
+    toml_order(key)
 
 Specify the correct order for the different items of the TOML files.
 The keys `name`, `uuid`, `autors` and `version` occur in that order at the top of the TOML 
