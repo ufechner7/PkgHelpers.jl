@@ -67,23 +67,6 @@ function freeze(pkg; julia=nothing, relaxed = false, copy_manifest=false)
 end
 
 function freeze1(pkg; julia=nothing, relaxed = false, lowerbound=false, status="", mytoml="")
-    function printkv(io, dict, key)
-        if key in keys(dict)
-            value = dict[key]
-            if key == "authors"
-                println(io, "$key = ", value)
-            else
-                println(io, "$key = \"", value, "\"")
-            end
-        end
-    end
-    function print_section(io, dict, key)
-        if key in keys(dict)
-            println(io)
-            println(io, "[$(key)]")
-            TOML.print(io, dict[key]; sorted=true, by=identity)
-        end
-    end
     if isnothing(julia)
         julia=juliaversion()
     end
@@ -92,21 +75,11 @@ function freeze1(pkg; julia=nothing, relaxed = false, lowerbound=false, status="
         project_file = mytoml
     end
     if compat.count > 0
-        dict = (TOML.parsefile(project_file))
+        dict = TOML.parsefile(project_file)
         push!(compat, ("julia" => julia))
+        dict["compat"] = compat
         open(project_file, "w") do io
-            printkv(io, dict, "name")
-            printkv(io, dict, "uuid")
-            printkv(io, dict, "authors")
-            printkv(io, dict, "version")
-            print_section(io, dict, "deps")
-            print_section(io, dict, "weakdeps")
-            print_section(io, dict, "extensions")
-            println(io)
-            println(io, "[compat]")
-            TOML.print(io, compat; sorted=true, by=identity)
-            print_section(io, dict, "extras")
-            print_section(io, dict, "targets")
+            TOML.print(io, dict; sorted=true, by=toml_order)
         end
     end
     println("Added $(compat.count) entries to the compat section!")
@@ -204,13 +177,36 @@ end
 """
     docu()
 
-Display the HTLM documentation in a browser window.
+Display the HTML documentation in a browser window.
 """
 function docu()
     if Sys.islinux()
         Base.run(`xdg-open "docs/build/index.html"`; wait=false)
     end
     nothing
+end
+
+"""
+    toml_order(key)
+
+Specify the correct order for the different items of the TOML files.
+The keys `name`, `uuid`, `autors` and `version` occur in that order at the top of the TOML 
+as keys pointing to string values.
+They are followed by the `deps``, `compat`, `extras` and `targets` keys that point to 
+dictionaries a level lower.
+"""
+function toml_order(key::S)::Union{Int, S} where {S<:AbstractString}
+    d = Dict{String, Int}(
+        "name" => 10,
+        "uuid" => 20,
+        "authors" => 30,
+        "version" => 40,
+        "deps" => 50,
+        "compat" => 60,
+        "extras" => 70,
+        "targets" => 80,
+    )
+    return get(d, key, key)
 end
 
 end
