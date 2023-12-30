@@ -1,21 +1,25 @@
 name = "PkgHelpers"
 uuid = "a562b63c-6e73-49f2-82ca-bd0905bcffd6"
 authors = ["Uwe Fechner <uwe.fechner.msc@gmail.com> and contributors"]
-version = "0.3.0"
+version = "0.1.0"
 
 [deps]
 Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 
 [compat]
-Pkg = "1.4 - 1.11"
-julia = "1.4 - 1.11"
-TOML = "~1.0"
+Pkg = "1.10"
+PkgCaret = "^1.2.3"
+PkgEquality = "=7.8.9"
+PkgGeq = ">= 0.1.2"
+PkgGeqUnicode = "≥ 3.4.5"
+PkgLt = "< 6.7.8"
+PkgTilde = "~4.5.6"
+TOML = "=1.0.3"
+julia = "1.6"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 
 [targets]
-test = ["Documenter", "Test"]
-
+test = ["Test"]

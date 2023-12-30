@@ -79,3 +79,10 @@ freeze(Pkg; relaxed=true)
 This omits the patch version from the generated `compat` entry. The effect is that non-braking updates of the packages are allowed. While updates of the patch version SHOULD be non-braking, this is not always the case. Use this option with care.
 
 More info about the version specifiers can be found [here](https://pkgdocs.julialang.org/v1/compatibility/).
+
+### Keeping your existing compats
+From version 0.3.0 onwards, there exists the `keep` keyword argument to both the `freeze` and `lower_bound` functions.
+This argument when `true` (the default) will keep any existing compat entries from the Project.toml.
+These compat _values_ are kept _exactly as is_ with all specifiers intact.
+Their order may however be affected by the call to `freeze` or `lower_bound`.
+Setting `keep` to `false` will result in the previous behaviour of the compat section being overwritten entirely.

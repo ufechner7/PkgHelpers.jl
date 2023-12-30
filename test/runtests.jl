@@ -29,9 +29,9 @@ st = "Project PkgHelpers v0.1.0\nStatus `~/repos/PkgHelpers.jl/Project.toml`\n  
     @test haskey(compat, "TOML")
     @test haskey(compat, "Pkg")
     mydir = mktempdir()
-    filename = "test-1.toml"
-    filename2 = "test-2.toml"
-    @show mytoml = joinpath(mydir, filename)
+    filename = "test-nocompat.toml"
+    filename2 = "test-freeze.toml"
+    mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
     chmod(mytoml, 0o777)
     PkgHelpers.freeze1(nothing; julia="~1.10", status=st, mytoml=mytoml)
@@ -43,8 +43,8 @@ end
     @test haskey(compat, "TOML")
     @test haskey(compat, "Pkg")
     mydir = mktempdir()
-    filename = "test-1.toml"
-    filename2 = "test-3.toml"
+    filename = "test-nocompat.toml"
+    filename2 = "test-freeze-relaxed.toml"
     mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
     chmod(mytoml, 0o777)
@@ -57,8 +57,8 @@ end
     @test haskey(compat, "TOML")
     @test haskey(compat, "Pkg")
     mydir = mktempdir()
-    filename = "test-1.toml"
-    filename2 = "test-4.toml"
+    filename = "test-nocompat.toml"
+    filename2 = "test-lower_bound.toml"
     mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
     chmod(mytoml, 0o777)
@@ -71,8 +71,8 @@ end
     @test haskey(compat, "TOML")
     @test haskey(compat, "Pkg")
     mydir = mktempdir()
-    filename = "test-1.toml"
-    filename2 = "test-5.toml"
+    filename = "test-nocompat.toml"
+    filename2 = "test-lower_bound-relaxed.toml"
     mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
     chmod(mytoml, 0o777)
@@ -86,7 +86,21 @@ end
     @test haskey(compat, "Pkg")
     mydir = mktempdir()
     filename = "test-unordered.toml"
-    filename2 = "test-2.toml"
+    filename2 = "test-freeze.toml"
+    mytoml = joinpath(mydir, filename)
+    cp(filename, mytoml, force=true)
+    chmod(mytoml, 0o777)
+    PkgHelpers.freeze1(nothing; julia="~1.10", status=st, mytoml=mytoml)
+    tomlcmp(filename2, mytoml)
+end
+@testset "keep - freeze" begin
+    project_file, compat = PkgHelpers.project_compat(Pkg, true, false; status=st)
+    @test basename(project_file) == "Project.toml"
+    @test haskey(compat, "TOML")
+    @test haskey(compat, "Pkg")
+    mydir = mktempdir()
+    filename = "test-various-specifiers-in.toml"
+    filename2 = "test-various-specifiers-out.toml"
     mytoml = joinpath(mydir, filename)
     cp(filename, mytoml, force=true)
     chmod(mytoml, 0o777)
