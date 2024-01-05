@@ -5,7 +5,7 @@ using Pkg, TOML
 export freeze, lower_bound, copy_manifest
 
 """
-    lower_bound(pkg; julia=nothing, relaxed = false, copy_manifest=false)
+    lower_bound(pkg; julia=nothing, relaxed = false, copy_manifest=false, keep=true)
 
 Adds the current package versions as lower bound to the compat section of the Project.toml file.
 
@@ -35,7 +35,7 @@ function lower_bound(pkg; julia=nothing, relaxed = false, copy_manifest=false, k
 end
 
 """
-    freeze(pkg; julia=juliaversion(), relaxed = false, copy_manifest=false)
+    freeze(pkg; julia=juliaversion(), relaxed = false, copy_manifest=false, keep=true)
 
 Freezes the current package versions by adding them to the Project.toml file.
 
