@@ -204,7 +204,7 @@ end
 Specify the correct order for the different items of the TOML files.
 The keys `name`, `uuid`, `autors` and `version` occur in that order at the top of the TOML 
 as keys pointing to string values.
-They are followed by the `deps``, `compat`, `extras` and `targets` keys that point to 
+They are followed by the `deps`, `compat`, `extras` and `targets` keys that point to 
 dictionaries a level lower.
 """
 function toml_order(key::S)::Union{Int, S} where {S<:AbstractString}
