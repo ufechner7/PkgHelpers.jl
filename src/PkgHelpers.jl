@@ -85,8 +85,8 @@ function freeze1(pkg; julia=nothing, relaxed = false, lowerbound=false, status="
         open(project_file, "w") do io
             TOML.print(io, dict; sorted=true, by=toml_order)
         end
+        println("Compat section now has $(compat.count) entries (was $(ori_compat.count)).")
     end
-    println("Added $(compat.count) entries to the compat section!")
     nothing
 end
 
