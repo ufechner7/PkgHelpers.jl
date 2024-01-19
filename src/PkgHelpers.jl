@@ -112,7 +112,7 @@ Returns the tuple (project_file, compat).
 function project_compat(pkg, relaxed, lowerbound; prn=false, status="")
     if status==""
         io = IOBuffer();
-        pkg.status(; io=io)
+        Pkg.status(; io=io)
         st = String(take!(io))
     else
         st = status
