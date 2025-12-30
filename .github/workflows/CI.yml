@@ -22,7 +22,7 @@ jobs:
           - '1.4'
           - '1.6'
           - '1.9'
-          - 'nightly'
+          - '1.12' # nightly won't work when the julia version is restricted
         os:
           - ubuntu-latest
         arch:
@@ -51,7 +51,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: julia-actions/setup-julia@v1
         with:
-          version: '1'
+          version: '1.10' # use Julia 1.10 for docs; docs/Project.toml supports Julia 1.9 and 1.10, with 1.10 as the latest
       - uses: julia-actions/julia-buildpkg@v1
       - uses: julia-actions/julia-docdeploy@v1
         env:
