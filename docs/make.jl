@@ -1,10 +1,11 @@
-using PkgHelpers, Pkg
+using Pkg
 if ("TestEnv" ∈ keys(Pkg.project().dependencies))
     if ! ("Documenter" ∈ keys(Pkg.project().dependencies))
         using TestEnv; TestEnv.activate()
     end
 end
 using Documenter: deploydocs, makedocs
+using PkgHelpers
 
 src="README.md"
 dst="docs/src/index.md"
