@@ -85,4 +85,4 @@ From version 0.3.0 onwards, there exists the `keep` keyword argument to both the
 This argument when `true` (the default) will keep any existing compat entries from the Project.toml.
 These compat _values_ are kept _exactly as is_ with all specifiers intact.
 Their order may however be affected by the call to `freeze` or `lower_bound`.
-Setting `keep` to `false` will result in the previous behaviour of the compat section being overwritten entirely.
+Setting `keep` to `false` will result in the previous behavior of the compat section being overwritten entirely.

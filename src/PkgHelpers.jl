@@ -16,7 +16,7 @@ Adds the current package versions as lower bound to the compat section of the Pr
                  from the generated compat entries.
 - copy_manifest: if `true`, create a copy of the current `Manifest.toml` file using
                  a naming scheme like "Manifest.toml-1.10-windows"
-- keep:          if `true` (deftault) any existing compat entries are kept as is (maybe reordered)
+- keep:          if `true` (default) any existing compat entries are kept as is (maybe reordered)
 
 # Examples
 ```julia-repl
@@ -47,7 +47,7 @@ Freezes the current package versions by adding them to the Project.toml file.
                  compat entries. This means, non-breaking minor updates are allowed.
 - copy_manifest: if `true`, create a copy of the current `Manifest.toml` file using
                  a naming scheme like "Manifest.toml-1.10-windows"
-- keep:          if `true` (deftault) any existing compat entries are kept as is (maybe reordered)
+- keep:          if `true` (default) any existing compat entries are kept as is (maybe reordered)
 
 For strict compatibility only add the Julia versions you tested your project with.
 
@@ -202,7 +202,7 @@ end
     toml_order(key)
 
 Specify the correct order for the different items of the TOML files.
-The keys `name`, `uuid`, `autors` and `version` occur in that order at the top of the TOML 
+The keys `name`, `uuid`, `authors` and `version` occur in that order at the top of the TOML 
 as keys pointing to string values.
 They are followed by the `deps`, `compat`, `extras` and `targets` keys that point to 
 dictionaries a level lower.
