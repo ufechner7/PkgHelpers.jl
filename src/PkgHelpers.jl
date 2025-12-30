@@ -28,7 +28,7 @@ function lower_bound(pkg; julia=nothing, relaxed = false, copy_manifest=false, k
     if isnothing(julia)
         julia = juliaversion(true)
     end
-    freeze1(pkg; julia=julia, relaxed=relaxed, lowerbound=true)
+    freeze1(pkg; julia=julia, relaxed=relaxed, lowerbound=true, keep)
     if copy_manifest
         PkgHelpers.copy_manifest()
     end
@@ -62,7 +62,7 @@ function freeze(pkg; julia=nothing, relaxed = false, copy_manifest=false, keep=t
     if isnothing(julia)
         julia = juliaversion()
     end
-    freeze1(pkg; julia=julia, relaxed=relaxed)
+    freeze1(pkg; julia=julia, relaxed=relaxed, keep)
     if copy_manifest
         PkgHelpers.copy_manifest()
     end
